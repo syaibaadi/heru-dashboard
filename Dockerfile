@@ -1,5 +1,5 @@
 # Gunakan image Node.js sebagai base image untuk membangun aplikasi
-FROM node:16 AS build
+FROM node:18 AS build
 
 # Set direktori kerja
 WORKDIR /app
@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Bangun aplikasi Vue.js
-RUN npm run build
+RUN npm install -g serve
 
 # Gunakan image Nginx untuk menjalankan aplikasi
-FROM nginx:alpine
+FROM node:18
 
 # Salin hasil build dari tahap sebelumnya ke direktori yang sesuai pada Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
@@ -26,4 +26,4 @@ COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 8080
 
 # Jalankan Nginx untuk melayani aplikasi
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", ".", "--listen", "8080"]
