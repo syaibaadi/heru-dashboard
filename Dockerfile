@@ -16,14 +16,19 @@ COPY . .
 # Bangun aplikasi Vue.js
 RUN npm install -g serve
 
-# Gunakan image Nginx untuk menjalankan aplikasi
-FROM node:18
-
-# Salin hasil build dari tahap sebelumnya ke direktori yang sesuai pada Nginx
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 8080
 EXPOSE 8080
 
 # Jalankan Nginx untuk melayani aplikasi
 CMD ["serve", "-s", ".", "--listen", "8080"]
+
+# Gunakan image Nginx untuk menjalankan aplikasi
+# FROM node:18
+
+# Salin hasil build dari tahap sebelumnya ke direktori yang sesuai pada Nginx
+# COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 8080
+# EXPOSE 8080
+
+# # Jalankan Nginx untuk melayani aplikasi
+# CMD ["serve", "-s", ".", "--listen", "8080"]
