@@ -143,7 +143,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeDeleteModal">Batal</button>
-              <button type="button" class="btn btn-danger" @click="confirmDeleteKendaraan">Hapus</button>
+              <button type="button" class="btn btn-danger" @click="confirmDeleteWisata">Hapus</button>
             </div>
           </div>
         </div>
