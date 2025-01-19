@@ -119,6 +119,10 @@
                   <label for="price" class="form-label">Price</label>
                   <input type="number" id="price" v-model="form.price" class="form-control" required />
                 </div>
+                <div class="mb-3">
+                  <label for="image" class="form-label">Image</label>
+                  <input type="file" id="image" @change="handleImageUpload" class="form-control" />
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
@@ -190,6 +194,16 @@
       },
     },
     methods: {
+      handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            this.form.imageBase64 = reader.result.split(',')[1]; // Ambil bagian base64
+          };
+          reader.readAsDataURL(file);
+        }
+      },
       // Ambil data dari API
       async fetchWisata() {
         try {
@@ -214,20 +228,30 @@
         this.showModal = false;
         this.form = {
           nama: "",
-          type: "",
-          capacity: 0,
-          number: "",
+          description: "",
+          benefit: "",
+          destination: "",
+          price: 0,
+          imageBase64: "", // Reset image base64
         };
       },
       async addWisata() {
         try {
+          const wisataData = {
+            nama: this.form.nama,
+            description: this.form.description,
+            benefit: this.form.benefit,
+            destination: this.form.destination,
+            price: this.form.price,
+            image: this.form.imageBase64, // Gambar dalam format base64
+          };
           // const apiUrl = import.meta.env.VITE_API_URL;
           const response = await fetch(`http://103.250.11.13:8000/wisata`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.form),
+            body: JSON.stringify(wisataData),
           });
           if (response.ok) {
             this.fetchWisata();
