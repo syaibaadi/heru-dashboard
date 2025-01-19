@@ -164,6 +164,7 @@
           benefit: "",
           destination: "",
           price: 0,
+          image: ""
         },
       };
     },
