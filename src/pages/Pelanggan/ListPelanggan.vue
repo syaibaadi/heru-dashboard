@@ -166,7 +166,7 @@
       viewDetail(id) {
         this.$router.push(`/kendaraan/${id}`);
       },
-      deleteKendaraan(id) {
+      deletePelanggan(id) {
         this.deletePelangganId = id;
         this.showDeleteModal = true;
       },
@@ -177,11 +177,11 @@
       async confirmDeletePelanggan() {
         try {
             // const apiUrl = import.meta.env.VITE_API_URL;
-            const response = await fetch(`http://103.250.11.13:8000/kendaraan/${this.deletePelangganId}`, {
+            const response = await fetch(`http://103.250.11.13:8000/pelanggan/${this.deletePelangganId}`, {
                 method: "DELETE",
             });
             if (response.ok) {
-                this.fetchKendaraan();
+                this.fetchPelanggan();
             } else {
                 console.error("Failed to delete kendaraan");
             }

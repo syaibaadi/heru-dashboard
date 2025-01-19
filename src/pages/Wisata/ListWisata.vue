@@ -32,7 +32,6 @@
             <td>{{ item.benefit }}</td>
             <td>{{ item.price }}</td>
             <td>
-              <button class="btn btn-info btn-sm me-2" @click="viewDetail(item.id)">Detail</button>
               <button class="btn btn-danger btn-sm" @click="deleteWisata(item.id)">Hapus</button>
             </td>
           </tr>
@@ -139,7 +138,7 @@
               <button type="button" class="btn-close" @click="closeDeleteModal"></button>
             </div>
             <div class="modal-body">
-              <p>Apakah Anda yakin ingin menghapus kendaraan ini?</p>
+              <p>Apakah Anda yakin ingin menghapus Wisata ini?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeDeleteModal">Batal</button>
@@ -276,17 +275,17 @@
       },
       async confirmDeleteWisata() {
         try {
-          const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`${apiUrl}/wisata/${this.deleteWisataId}`, {
+          // const apiUrl = import.meta.env.VITE_API_URL;
+          const response = await fetch(`http://103.250.11.13:8000/wisata/${this.deleteWisataId}`, {
             method: "DELETE",
           });
           if (response.ok) {
-            this.fetchKendaraan();
+            this.fetchWisata();
           } else {
-            console.error("Failed to delete kendaraan");
+            console.error("Failed to delete Wisata");
           }
         } catch (error) {
-          console.error("Failed to delete kendaraan:", error);
+          console.error("Failed to delete Wisata:", error);
         } finally {
           this.closeDeleteModal();
         }

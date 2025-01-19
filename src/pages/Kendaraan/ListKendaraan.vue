@@ -29,7 +29,6 @@
           <td>{{ item.capacity }}</td>
           <td>{{ item.number }}</td>
           <td>
-            <button class="btn btn-info btn-sm me-2" @click="viewDetail(item.id)">Detail Kendaraan</button>
             <button class="btn btn-danger btn-sm" @click="deleteKendaraan(item.id)">Hapus Kendaraan</button>
           </td>
         </tr>

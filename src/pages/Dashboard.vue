@@ -40,7 +40,7 @@ export default {
       statsCards: [
         {
           type: "warning",
-          icon: "ti-server",
+          icon: "ti-map-alt",
           title: "Wisata",
           value: "5",
         },
@@ -48,19 +48,19 @@ export default {
           type: "success",
           icon: "ti-wallet",
           title: "Transaction",
-          value: "3",
+          value: "0",
         },
         {
           type: "danger",
-          icon: "ti-pulse",
+          icon: "ti-user",
           title: "Pelanggan",
-          value: "10",
+          value: "4",
         },
         {
           type: "info",
-          icon: "ti-twitter-alt",
-          title: "Admin",
-          value: "5",
+          icon: "ti-car",
+          title: "Kendaraan",
+          value: "2",
         },
       ],
     };
