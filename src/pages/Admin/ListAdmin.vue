@@ -27,7 +27,6 @@
             <td>{{ item.nama }}</td>
             <td>{{ item.email }}</td>
             <td>
-              <button class="btn btn-info btn-sm me-2" @click="viewDetail(item.id)">Detail</button>
               <button class="btn btn-danger btn-sm" @click="deleteAdmin(item.id)">Hapus</button>
             </td>
           </tr>

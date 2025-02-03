@@ -3,10 +3,10 @@
     <side-bar>
       <template slot="links">
         <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel" />
-        <!-- <sidebar-link to="/pelanggan" name="Pelanggan" icon="ti-user" /> -->
+        <sidebar-link to="/pelanggan" name="Pelanggan" icon="ti-user" />
         <sidebar-link to="/admin" name="Admin" icon="ti-user" />
         <sidebar-link to="/wisata" name="Wisata" icon="ti-map-alt" />
-        <!-- <sidebar-link to="/kendaraan" name="Kendaraan" icon="ti-car" /> -->
+        <sidebar-link to="/kendaraan" name="Kendaraan" icon="ti-car" />
         <sidebar-link to="/transaksi" name="Transaksi" icon="ti-wallet" />
       </template>
       <mobile-menu>
