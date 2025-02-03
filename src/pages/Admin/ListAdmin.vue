@@ -178,7 +178,7 @@
       async fetchAdmin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/admin`, {
+          const response = await fetch(`http://103.179.56.241:8000/admin`, {
             method: "GET",
           });
           const admins = await response.json();
@@ -206,7 +206,7 @@
       async addAdmin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/admin`, {
+          const response = await fetch(`http://103.179.56.241:8000/admin`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -237,7 +237,7 @@
       async confirmDeleteAdmin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/admin/${this.deleteAdminId}`, {
+          const response = await fetch(`http://103.179.56.241:8000/admin/${this.deleteAdminId}`, {
             method: "DELETE",
           });
           if (response.ok) {

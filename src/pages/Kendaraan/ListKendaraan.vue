@@ -180,7 +180,7 @@ export default {
     async fetchKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`http://103.250.11.13:8000/kendaraan`, {
+        const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
           method: "GET",
         });
         const kendaraans = await response.json();
@@ -206,7 +206,7 @@ export default {
     async addKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`http://103.250.11.13:8000/kendaraan`, {
+        const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -237,7 +237,7 @@ export default {
     async confirmDeleteKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`http://103.250.11.13:8000/kendaraan/${this.deleteKendaraanId}`, {
+        const response = await fetch(`http://103.179.56.241:8000/kendaraan/${this.deleteKendaraanId}`, {
           method: "DELETE",
         });
         if (response.ok) {

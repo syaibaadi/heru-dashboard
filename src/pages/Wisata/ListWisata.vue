@@ -207,7 +207,7 @@
       async fetchWisata() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/wisata`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata`, {
             method: "GET",
           });
           const wisatas = await response.json();
@@ -245,7 +245,7 @@
             image: this.form.imageBase64, // Gambar dalam format base64
           };
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/wisata`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -276,7 +276,7 @@
       async confirmDeleteWisata() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/wisata/${this.deleteWisataId}`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata/${this.deleteWisataId}`, {
             method: "DELETE",
           });
           if (response.ok) {

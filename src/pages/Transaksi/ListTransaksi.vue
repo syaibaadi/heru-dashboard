@@ -14,16 +14,16 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>#</th>
             <th>Name</th>
-            <th>Email</th>
+            <th>Alamat</th>
+            <th>Harga</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in paginatedData" :key="item.id">
-            <td>{{ index + 1 + (currentPage - 1) * limit }}</td>
             <td>{{ item.nama }}</td>
-            <td>{{ item.email }}</td>
+            <td>{{ item.alamat }}</td>
+            <td>{{ item.total_price }}</td>
           </tr>
           <tr v-if="paginatedData.length === 0">
             <td colspan="3" class="text-center">No data found</td>
@@ -116,7 +116,7 @@
       async fetchTransaksi() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.250.11.13:8000/transaksi`, {
+          const response = await fetch(`http://103.179.56.241:8000/transaksi`, {
             method: "GET",
           });
           const transaksis = await response.json();
