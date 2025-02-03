@@ -84,7 +84,7 @@ export default {
         this.statsCards[1].value = transaksiData.length; // Set the number of items in the 'transaksi' array
 
         // Fetch data for Pelanggan
-        const pelangganResponse = await fetch(`http://103.179.56.241:8000/transaksi`, {
+        const pelangganResponse = await fetch(`http://103.179.56.241:8000/pelanggan`, {
           method: "GET",
         });
         const pelangganData = await pelangganResponse.json(); // Parse the JSON response
