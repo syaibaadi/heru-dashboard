@@ -17,6 +17,7 @@
             <th>Name</th>
             <th>Alamat</th>
             <th>Harga</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
             <td>{{ item.nama }}</td>
             <td>{{ item.alamat }}</td>
             <td>{{ item.total_price }}</td>
+            <td>{{ item.status }}</td>
           </tr>
           <tr v-if="paginatedData.length === 0">
             <td colspan="3" class="text-center">No data found</td>
@@ -96,9 +98,17 @@
     computed: {
       // Data yang difilter berdasarkan search query
       filteredData() {
-        return this.transaksis.filter((item) =>
+        const filtered = this.transaksis.filter((item) =>
           item.nama.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
+        
+        // Mengurutkan berdasarkan tanggal terbaru (misalnya 'created_at')
+        return filtered.sort((a, b) => {
+          // Pastikan 'created_at' adalah format tanggal yang dapat dibandingkan
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          return dateB - dateA; // Urutkan dari terbaru (descending)
+        });
       },
       // Total halaman berdasarkan data yang difilter
       totalPages() {
@@ -115,7 +125,6 @@
       // Ambil data dari API
       async fetchTransaksi() {
         try {
-          // const apiUrl = import.meta.env.VITE_API_URL;
           const response = await fetch(`http://103.179.56.241:8000/transaksi`, {
             method: "GET",
           });
@@ -134,7 +143,7 @@
       },
     },
   };
-  </script>
+  </script>  
   
   <style scoped>
   .table {
