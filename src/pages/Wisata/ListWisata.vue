@@ -285,7 +285,7 @@
     methods: {
       async fetchKendaraan() {
         try {
-          const response = await fetch(`http://192.168.1.100:8000/kendaraan`);
+          const response = await fetch(`http://103.179.56.241:8000/kendaraan`);
           const kendaraan = await response.json();
           this.kendaraanList = kendaraan;
         } catch (error) {
@@ -306,8 +306,8 @@
       async fetchWisata() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          // const response = await fetch(`http://192.168.1.100:8000/wisata`, {
-          const response = await fetch(`http://192.168.1.100:8000/wisata`, {
+          // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata`, {
             method: "GET",
           });
           const wisatas = await response.json();
@@ -348,8 +348,8 @@
             kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
           // const apiUrl = import.meta.env.VITE_API_URL;
-          // const response = await fetch(`http://192.168.1.100:8000/wisata`, {
-          const response = await fetch(`http://192.168.1.100:8000/wisata`, {
+          // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -368,8 +368,8 @@
       },
       async editWisata(id) {
         try {
-          // const response = await fetch(`http://192.168.1.100:8000/wisata/${id}`);
-          const response = await fetch(`http://192.168.1.100:8000/wisata/${id}`);
+          // const response = await fetch(`http://103.179.56.241:8000/wisata/${id}`);
+          const response = await fetch(`http://103.179.56.241:8000/wisata/${id}`);
           const data = await response.json();
           this.form = {
             id: data.id,
@@ -401,8 +401,8 @@
             image: this.form.imageBase64, // Gambar dalam format base64
             kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
-          // const response = await fetch(`http://192.168.1.100:8000/wisata/${this.form.id}`, {
-          const response = await fetch(`http://192.168.1.100:8000/wisata/${this.form.id}`, {
+          // const response = await fetch(`http://103.179.56.241:8000/wisata/${this.form.id}`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata/${this.form.id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -445,7 +445,7 @@
       async confirmDeleteWisata() {
         try {
           // Hapus data dari server
-          const response = await fetch(`http://192.168.1.100:8000/wisata/${this.deleteWisataId}`, {
+          const response = await fetch(`http://103.179.56.241:8000/wisata/${this.deleteWisataId}`, {
             method: "DELETE",
           });
           
