@@ -19,9 +19,11 @@
             <th>Description</th>
             <th>Destinasi</th>
             <th>Benefit</th>
-            <th>Price</th>  
+            <th>Price</th>
+            <th>Minimal Person</th>
+            <th>Maksimal Person</th>  
             <th>Kendaraan</th>
-            <th>Kapasitas Maksimal</th>
+            <th>Kapasitas MaksimalKendaraan</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -33,6 +35,8 @@
             <td>{{ item.destination }}</td>
             <td>{{ item.benefit }}</td>
             <td>{{ item.price }}</td>
+            <td>{{ item.min_person }}</td>
+            <td>{{ item.max_person }}</td>
             <td>{{ item.kendaraan_nama }}</td>
             <td>{{ item.kendaraan_capacity }}</td>
             <td>
@@ -124,12 +128,20 @@
                   <input type="number" id="price" v-model="form.price" class="form-control" required />
                 </div>
                 <div class="mb-3">
+                  <label for="min_person" class="form-label">Minimal Person</label>
+                  <input type="number" id="min_person" v-model="form.min_person" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="max_person" class="form-label">Maksimal Person</label>
+                  <input type="number" id="max_person" v-model="form.max_person" class="form-control" required />
+                </div>
+                <div class="mb-3">
                   <label for="image" class="form-label">Image</label>
                   <input type="file" id="image" @change="handleImageUpload" class="form-control" />
                 </div>
                 <div class="mb-3">
                   <label for="kendaraan" class="form-label">Kendaraan</label>
-                  <select id="kendaraan" v-model="form.kendaraan_id" class="form-select" required>
+                  <select id="kendaraan" v-model="form.kendaraan_id" class="form-select" aria-label="Default select example" required>
                     <option value="" disabled>Pilih Kendaraan</option>
                     <option v-for="kendaraan in kendaraanList" :key="kendaraan.id" :value="kendaraan.id">
                       {{ kendaraan.nama }} ({{ kendaraan.capacity }} kapasitas)
@@ -172,6 +184,14 @@
                 <div class="mb-3">
                   <label for="price" class="form-label">Price</label>
                   <input type="number" id="price" v-model="form.price" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="min_person" class="form-label">Minimal Person</label>
+                  <input type="number" id="min_person" v-model="form.min_person" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="max_person" class="form-label">Maksimal Person</label>
+                  <input type="number" id="max_person" v-model="form.max_person" class="form-control" required />
                 </div>
                 <div class="mb-3">
                   <label for="image" class="form-label">Image</label>
@@ -232,6 +252,8 @@
           benefit: "",
           destination: "",
           price: 0,
+          min_person: 0,
+          max_person: 0,
           image: "",
           imageBase64: "", // Image dalam base64
           kendaraan_id: null // ID kendaraan yang dipilih
@@ -284,7 +306,7 @@
       async fetchWisata() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          // const response = await fetch(`http://192.168.1.100:8000/wisata`, {
           const response = await fetch(`http://192.168.1.100:8000/wisata`, {
             method: "GET",
           });
@@ -320,11 +342,13 @@
             benefit: this.form.benefit,
             destination: this.form.destination,
             price: this.form.price,
+            min_person: this.form.min_person,
+            max_person: this.form.max_person,
             image: this.form.imageBase64, // Gambar dalam format base64
             kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
           // const apiUrl = import.meta.env.VITE_API_URL;
-          // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          // const response = await fetch(`http://192.168.1.100:8000/wisata`, {
           const response = await fetch(`http://192.168.1.100:8000/wisata`, {
             method: "POST",
             headers: {
@@ -344,7 +368,7 @@
       },
       async editWisata(id) {
         try {
-          // const response = await fetch(`http://103.179.56.241:8000/wisata/${id}`);
+          // const response = await fetch(`http://192.168.1.100:8000/wisata/${id}`);
           const response = await fetch(`http://192.168.1.100:8000/wisata/${id}`);
           const data = await response.json();
           this.form = {
@@ -354,6 +378,8 @@
             benefit: data.benefit,
             destination: data.destination,
             price: data.price,
+            min_person: data.min_person,
+            max_person: data.max_person,
             imageBase64: data.image, // Gambar mungkin sudah base64 di API
           };
           this.showEditModal = true;
@@ -370,10 +396,12 @@
             benefit: this.form.benefit,
             destination: this.form.destination,
             price: this.form.price,
+            min_person: this.form.min_person,
+            max_person:this.form.max_person,
             image: this.form.imageBase64, // Gambar dalam format base64
             kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
-          // const response = await fetch(`http://103.179.56.241:8000/wisata/${this.form.id}`, {
+          // const response = await fetch(`http://192.168.1.100:8000/wisata/${this.form.id}`, {
           const response = await fetch(`http://192.168.1.100:8000/wisata/${this.form.id}`, {
             method: "PUT",
             headers: {
@@ -459,5 +487,27 @@
     overflow-y: auto; /* Membuat konten modal dapat di-scroll secara vertikal */
     max-height: 70vh; /* Sesuaikan agar bagian body modal bisa di-scroll */
   }
+  /* Styling untuk dropdown kendaraan */
+  select.form-select {
+    background-color: #f8f9fa; /* Warna latar belakang terang */
+    border: 1px solid #ced4da; /* Warna border */
+    padding: 10px; /* Padding yang lebih besar untuk tampilan lebih luas */
+    font-size: 1rem; /* Ukuran font lebih besar untuk keterbacaan */
+    border-radius: 5px; /* Sudut dropdown yang lebih halus */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  select.form-select:focus {
+    border-color: #0056b3; /* Warna border saat fokus */
+    background-color: #e9ecef; /* Warna latar belakang saat fokus */
+    outline: none; /* Menghapus outline default */
+  }
+
+  select.form-select:hover {
+    background-color: #e2e6ea; /* Warna latar belakang ketika hover */
+    border-color: #0056b3; /* Ubah warna border saat hover */
+  }
+
+
 </style>
   

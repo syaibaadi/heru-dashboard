@@ -29,8 +29,8 @@
           <td>{{ item.telfon }}</td>
           <td>{{ item.total_user }}</td>
           <td>{{ item.wisataName }}</td>
-          <td>{{ formatDate(item.book_date) }}</td>
-          <td>{{ item.total_price | currency }}</td>
+          <td>{{ formatDate(item.book_date) }} at 07:00</td>
+          <td>Rp. {{ formatCurrency(item.total_price | currency) }}</td>
           <td>{{ item.status }}</td>
         </tr>
         <tr v-if="paginatedData.length === 0">
@@ -122,6 +122,14 @@ export default {
     },
   },
   methods: {
+    formatCurrency(amount) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0, // Tidak ada desimal jika tidak perlu
+        maximumFractionDigits: 0, // Menampilkan angka tanpa desimal
+      }).format(amount);
+    },
     // Ambil data transaksi dari API
     async fetchTransaksi() {
       try {
@@ -170,10 +178,6 @@ export default {
         year: "numeric",
         month: "long",
         day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false, // 24-hour format
       };
       return new Date(date).toLocaleString(undefined, options);
     },
