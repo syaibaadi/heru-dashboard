@@ -20,6 +20,8 @@
             <th>Destinasi</th>
             <th>Benefit</th>
             <th>Price</th>  
+            <th>Kendaraan</th>
+            <th>Kapasitas Maksimal</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -31,7 +33,10 @@
             <td>{{ item.destination }}</td>
             <td>{{ item.benefit }}</td>
             <td>{{ item.price }}</td>
+            <td>{{ item.kendaraan_nama }}</td>
+            <td>{{ item.kendaraan_capacity }}</td>
             <td>
+              <button class="btn btn-warning btn-sm" @click="editWisata(item.id)">Edit</button>
               <button class="btn btn-danger btn-sm" @click="deleteWisata(item.id)">Hapus</button>
             </td>
           </tr>
@@ -122,6 +127,65 @@
                   <label for="image" class="form-label">Image</label>
                   <input type="file" id="image" @change="handleImageUpload" class="form-control" />
                 </div>
+                <div class="mb-3">
+                  <label for="kendaraan" class="form-label">Kendaraan</label>
+                  <select id="kendaraan" v-model="form.kendaraan_id" class="form-select" required>
+                    <option value="" disabled>Pilih Kendaraan</option>
+                    <option v-for="kendaraan in kendaraanList" :key="kendaraan.id" :value="kendaraan.id">
+                      {{ kendaraan.nama }} ({{ kendaraan.capacity }} kapasitas)
+                    </option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Wisata Modal -->
+      <div v-if="showEditModal" class="modal" style="display: block; background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Wisata</h5>
+              <button type="button" class="btn-close" @click="closeEditModal"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="updateWisata">
+                <div class="mb-3">
+                  <label for="nama" class="form-label">Name</label>
+                  <input type="text" id="nama" v-model="form.nama" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description</label>
+                  <input type="text" id="description" v-model="form.description" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="benefit" class="form-label">Benefit</label>
+                  <input type="text" id="benefit" v-model="form.benefit" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="destination" class="form-label">Destination</label>
+                  <input type="text" id="destination" v-model="form.destination" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="price" class="form-label">Price</label>
+                  <input type="number" id="price" v-model="form.price" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="image" class="form-label">Image</label>
+                  <input type="file" id="image" @change="handleImageUpload" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="kendaraan" class="form-label">Kendaraan</label>
+                  <select id="kendaraan" v-model="form.kendaraan_id" class="form-select" required>
+                    <option value="" disabled>Pilih Kendaraan</option>
+                    <option v-for="kendaraan in kendaraanList" :key="kendaraan.id" :value="kendaraan.id">
+                      {{ kendaraan.nama }} ({{ kendaraan.capacity }} kapasitas)
+                    </option>
+                  </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
@@ -159,6 +223,7 @@
         limit: 5, // Jumlah data per halaman
         searchQuery: "", // Query pencarian
         showModal: false,
+        showEditModal: false,
         showDeleteModal: false,
         deleteWisataId: null,
         form: {
@@ -167,12 +232,15 @@
           benefit: "",
           destination: "",
           price: 0,
-          image: ""
+          image: "",
+          imageBase64: "", // Image dalam base64
+          kendaraan_id: null // ID kendaraan yang dipilih
         },
       };
     },
     mounted() {
       this.fetchWisata();
+      this.fetchKendaraan();
     },
     computed: {
       // Data yang difilter berdasarkan search query
@@ -193,6 +261,15 @@
       },
     },
     methods: {
+      async fetchKendaraan() {
+        try {
+          const response = await fetch(`http://192.168.1.100:8000/kendaraan`);
+          const kendaraan = await response.json();
+          this.kendaraanList = kendaraan;
+        } catch (error) {
+          console.error("Failed to fetch kendaraan:", error);
+        }
+      },
       handleImageUpload(event) {
         const file = event.target.files[0];
         if (file) {
@@ -207,7 +284,8 @@
       async fetchWisata() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          const response = await fetch(`http://192.168.1.100:8000/wisata`, {
             method: "GET",
           });
           const wisatas = await response.json();
@@ -243,9 +321,11 @@
             destination: this.form.destination,
             price: this.form.price,
             image: this.form.imageBase64, // Gambar dalam format base64
+            kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
           // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
+          const response = await fetch(`http://192.168.1.100:8000/wisata`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -262,6 +342,67 @@
           console.error("Failed to add wisata:", error);
         }
       },
+      async editWisata(id) {
+        try {
+          // const response = await fetch(`http://103.179.56.241:8000/wisata/${id}`);
+          const response = await fetch(`http://192.168.1.100:8000/wisata/${id}`);
+          const data = await response.json();
+          this.form = {
+            id: data.id,
+            nama: data.nama,
+            description: data.description,
+            benefit: data.benefit,
+            destination: data.destination,
+            price: data.price,
+            imageBase64: data.image, // Gambar mungkin sudah base64 di API
+          };
+          this.showEditModal = true;
+        } catch (error) {
+          console.error("Failed to fetch wisata for edit:", error);
+        }
+      },
+      // Fungsi untuk mengupdate wisata
+      async updateWisata() {
+        try {
+          const wisataData = {
+            nama: this.form.nama,
+            description: this.form.description,
+            benefit: this.form.benefit,
+            destination: this.form.destination,
+            price: this.form.price,
+            image: this.form.imageBase64, // Gambar dalam format base64
+            kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
+          };
+          // const response = await fetch(`http://103.179.56.241:8000/wisata/${this.form.id}`, {
+          const response = await fetch(`http://192.168.1.100:8000/wisata/${this.form.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(wisataData),
+          });
+          if (response.ok) {
+            this.fetchWisata();  // Refresh data setelah update
+            this.closeEditModal();  // Tutup modal edit
+          } else {
+            console.error("Failed to update wisata");
+          }
+        } catch (error) {
+          console.error("Failed to update wisata:", error);
+        }
+      },
+      // Fungsi untuk menutup modal edit
+      closeEditModal() {
+        this.showEditModal = false;
+        this.form = {
+          nama: "",
+          description: "",
+          benefit: "",
+          destination: "",
+          price: 0,
+          imageBase64: "",
+        };
+      },
       viewDetail(id) {
         this.$router.push(`/wisata/${id}`);
       },
@@ -275,12 +416,15 @@
       },
       async confirmDeleteWisata() {
         try {
-          // const apiUrl = import.meta.env.VITE_API_URL;
-          const response = await fetch(`http://103.179.56.241:8000/wisata/${this.deleteWisataId}`, {
+          // Hapus data dari server
+          const response = await fetch(`http://192.168.1.100:8000/wisata/${this.deleteWisataId}`, {
             method: "DELETE",
           });
+          
           if (response.ok) {
-            this.fetchWisata();
+            // Hapus data lokal
+            this.wisatas = this.wisatas.filter(wisata => wisata.id !== this.deleteWisataId);
+            this.closeDeleteModal();  // Tutup modal
           } else {
             console.error("Failed to delete Wisata");
           }
@@ -289,17 +433,31 @@
         } finally {
           this.closeDeleteModal();
         }
-      },
+      }
     },
   };
   </script>
   
-  <style scoped>
+<style scoped>
   .table {
     margin-bottom: 1rem;
   }
   .pagination {
     margin-top: 1rem;
   }
-  </style>
+  .modal-dialog {
+    max-width: 800px; /* Setel lebar maksimum untuk modal */
+  }
+
+  .modal-content {
+    max-height: 90vh; /* Setel tinggi maksimum modal agar tidak melebihi layar */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-body {
+    overflow-y: auto; /* Membuat konten modal dapat di-scroll secara vertikal */
+    max-height: 70vh; /* Sesuaikan agar bagian body modal bisa di-scroll */
+  }
+</style>
   

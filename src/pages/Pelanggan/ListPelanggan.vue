@@ -147,6 +147,7 @@
       async fetchPelanggan() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
+          // const response = await fetch(`http://103.179.56.241:8000/pelanggan`, {
           const response = await fetch(`http://103.179.56.241:8000/pelanggan`, {
             method: "GET",
           });
@@ -177,6 +178,7 @@
       async confirmDeletePelanggan() {
         try {
             // const apiUrl = import.meta.env.VITE_API_URL;
+            // const response = await fetch(`http://103.179.56.241:8000/pelanggan/${this.deletePelangganId}`, {
             const response = await fetch(`http://103.179.56.241:8000/pelanggan/${this.deletePelangganId}`, {
                 method: "DELETE",
             });

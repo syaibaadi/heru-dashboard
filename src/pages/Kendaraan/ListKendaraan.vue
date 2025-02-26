@@ -18,7 +18,6 @@
           <th>Name</th>
           <th>Type</th>
           <th>Capacity</th>
-          <th>Police Number</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -27,9 +26,9 @@
           <td>{{ item.nama }}</td>
           <td>{{ item.type }}</td>
           <td>{{ item.capacity }}</td>
-          <td>{{ item.number }}</td>
           <td>
-            <button class="btn btn-danger btn-sm" @click="deleteKendaraan(item.id)">Hapus Kendaraan</button>
+            <button class="btn btn-info btn-sm" @click="editKendaraanData(item.id)">Edit</button>
+            <button class="btn btn-danger btn-sm" @click="deleteKendaraan(item.id)">Hapus</button>
           </td>
         </tr>
         <tr v-if="paginatedData.length === 0">
@@ -107,9 +106,34 @@
                 <label for="capacity" class="form-label">Capacity</label>
                 <input type="number" id="capacity" v-model="form.capacity" class="form-control" required />
               </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Kendaraan Modal -->
+    <div v-if="showEditModal" class="modal" style="display: block; background: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Kendaraan</h5>
+            <button type="button" class="btn-close" @click="closeEditModal"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="editKendaraan">
               <div class="mb-3">
-                <label for="number" class="form-label">Police Number</label>
-                <input type="text" id="number" v-model="form.number" class="form-control" required />
+                <label for="nama" class="form-label">Name</label>
+                <input type="text" id="nama" v-model="form.nama" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="type" class="form-label">Type</label>
+                <input type="text" id="type" v-model="form.type" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="capacity" class="form-label">Capacity</label>
+                <input type="number" id="capacity" v-model="form.capacity" class="form-control" required />
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -149,12 +173,14 @@ export default {
       searchQuery: "",
       showModal: false,
       showDeleteModal: false,
+      showEditModal: false,
       deleteKendaraanId: null,
+      selectedKendaraanId: null,
       form: {
         nama: "",
         type: "",
         capacity: 0,
-        number: "",
+        number: "12345"
       },
     };
   },
@@ -180,6 +206,7 @@ export default {
     async fetchKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
+        // const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
         const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
           method: "GET",
         });
@@ -206,6 +233,7 @@ export default {
     async addKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
+        // const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
         const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
           method: "POST",
           headers: {
@@ -237,6 +265,7 @@ export default {
     async confirmDeleteKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
+        // const response = await fetch(`http://103.179.56.241:8000/kendaraan/${this.deleteKendaraanId}`, {
         const response = await fetch(`http://103.179.56.241:8000/kendaraan/${this.deleteKendaraanId}`, {
           method: "DELETE",
         });
@@ -251,6 +280,45 @@ export default {
         this.closeDeleteModal();
       }
     },
+    editKendaraanData(id) {
+      // Cari kendaraan berdasarkan ID
+      const kendaraan = this.kendaraans.find((item) => item.id === id);
+      if (kendaraan) {
+        this.selectedKendaraanId = id;  // Menyimpan ID kendaraan yang dipilih
+        this.form = { ...kendaraan };   // Isi form dengan data kendaraan yang dipilih
+        this.showEditModal = true;      // Tampilkan modal edit
+      }
+    },
+    
+    // Menutup modal edit
+    closeEditModal() {
+      this.showEditModal = false;
+      this.form = { nama: "", type: "", capacity: 0 }; // Reset form
+      this.selectedKendaraanId = null;  // Reset ID kendaraan yang dipilih
+    },
+
+    // Mengubah data kendaraan
+    async editKendaraan() {
+      try {
+        const response = await fetch(`http://103.179.56.241:8000/kendaraan/${this.selectedKendaraanId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.form),
+        });
+        if (response.ok) {
+          this.fetchKendaraan();  // Refresh daftar kendaraan setelah berhasil update
+          this.closeEditModal();  // Tutup modal
+        } else {
+          console.error("Failed to update kendaraan");
+        }
+      } catch (error) {
+        console.error("Failed to update kendaraan:", error);
+      }
+    },
+
+    // Fungsi lainnya tetap sama, seperti fetchKendaraan, deleteKendaraan, dll.
   },
 };
 </script>

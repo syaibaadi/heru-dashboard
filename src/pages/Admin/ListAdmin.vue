@@ -27,6 +27,7 @@
             <td>{{ item.nama }}</td>
             <td>{{ item.email }}</td>
             <td>
+              <button class="btn btn-info btn-sm" @click="editAdminData(item.id)">Edit</button>
               <button class="btn btn-danger btn-sm" @click="deleteAdmin(item.id)">Hapus</button>
             </td>
           </tr>
@@ -112,6 +113,35 @@
         </div>
       </div>
 
+      <!-- Edit Kendaraan Modal -->
+      <div v-if="showEditModal" class="modal" style="display: block; background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Admin</h5>
+              <button type="button" class="btn-close" @click="closeEditModal"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="editAdmin">
+                <div class="mb-3">
+                  <label for="nama" class="form-label">Name</label>
+                  <input type="text" id="nama" v-model="form.nama" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" id="email" v-model="form.email" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" id="password" v-model="form.password" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Delete Confirmation Modal -->
       <div v-if="showDeleteModal" class="modal" style="display: block; background: rgba(0, 0, 0, 0.5);">
         <div class="modal-dialog">
@@ -143,7 +173,9 @@
         searchQuery: "", // Query pencarian
         showModal: false,
         showDeleteModal: false,
+        showEditModal: false,
         deleteAdminId: null,
+        selectedAdminId: null,
         form: {
           nama: "",
           email: "",
@@ -177,6 +209,7 @@
       async fetchAdmin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
+          // const response = await fetch(`http://103.179.56.241:8000/admin`, {
           const response = await fetch(`http://103.179.56.241:8000/admin`, {
             method: "GET",
           });
@@ -205,6 +238,7 @@
       async addAdmin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
+          // const response = await fetch(`http://103.179.56.241:8000/admin`, {
           const response = await fetch(`http://103.179.56.241:8000/admin`, {
             method: "POST",
             headers: {
@@ -236,11 +270,13 @@
       async confirmDeleteAdmin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
+          // const response = await fetch(`http://103.179.56.241:8000/admin/${this.deleteAdminId}`, {
           const response = await fetch(`http://103.179.56.241:8000/admin/${this.deleteAdminId}`, {
             method: "DELETE",
           });
           if (response.ok) {
-            this.fetchKendaraan();
+            this.admins = this.admins.filter(admins => admins.id !== this.deleteAdminId);
+            this.closeDeleteModal();  // Tutup modal
           } else {
             console.error("Failed to delete Admin");
           }
@@ -248,6 +284,43 @@
           console.error("Failed to delete Admin:", error);
         } finally {
           this.closeDeleteModal();
+        }
+      },
+      editAdminData(id) {
+        // Cari kendaraan berdasarkan ID
+        const admin = this.admins.find((item) => item.id === id);
+        if (admin) {
+          this.selectedAdminId = id;  // Menyimpan ID kendaraan yang dipilih
+          this.form = { ...admin };   // Isi form dengan data kendaraan yang dipilih
+          this.showEditModal = true;      // Tampilkan modal edit
+        }
+      },
+      
+      // Menutup modal edit
+      closeEditModal() {
+        this.showEditModal = false;
+        this.form = { nama: "", email: "", password: "" }; // Reset form
+        this.selectedAdminId = null;  // Reset ID kendaraan yang dipilih
+      },
+
+      // Mengubah data kendaraan
+      async editAdmin() {
+        try {
+          const response = await fetch(`http://103.179.56.241:8000/admin/${this.selectedAdminId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.form),
+          });
+          if (response.ok) {
+            this.fetchAdmin();  // Refresh daftar kendaraan setelah berhasil update
+            this.closeEditModal();  // Tutup modal
+          } else {
+            console.error("Failed to update kendaraan");
+          }
+        } catch (error) {
+          console.error("Failed to update kendaraan:", error);
         }
       },
     },

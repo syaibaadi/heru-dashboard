@@ -58,7 +58,7 @@ export default {
           type: "info",
           icon: "ti-car",
           title: "Kendaraan",
-          value: "2",
+          value: "0",
         },
       ],
     };
@@ -89,6 +89,13 @@ export default {
         });
         const pelangganData = await pelangganResponse.json(); // Parse the JSON response
         this.statsCards[2].value = pelangganData.length; // Set the number of items in the 'pelanggan' array
+
+        const kendaraanResponse = await fetch(`http://103.179.56.241:8000/kendaraan`, {
+          method: "GET",
+        });
+        const kendaraanData = await kendaraanResponse.json(); // Parse the JSON response
+        this.statsCards[3].value = kendaraanData.length; // Set the number of items in the 'wisata' array
+
       } catch (error) {
         console.error("Error fetching data:", error);
         // Optionally handle errors and update the UI accordingly

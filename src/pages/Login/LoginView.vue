@@ -49,6 +49,7 @@
       async handleLogin() {
         try {
           // const apiUrl = import.meta.env.VITE_API_URL;
+          // const response = await fetch(`http://103.179.56.241:8000/admin`, {
           const response = await fetch(`http://103.179.56.241:8000/admin`, {
             method: "GET",
           });
