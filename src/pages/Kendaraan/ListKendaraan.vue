@@ -180,7 +180,7 @@ export default {
         nama: "",
         type: "",
         capacity: 0,
-        number: "12345"
+        number: ""
       },
     };
   },
@@ -203,6 +203,15 @@ export default {
     },
   },
   methods: {
+    generateRandomNumber(length = 10) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    },
     async fetchKendaraan() {
       try {
         // const apiUrl = import.meta.env.VITE_API_URL;
@@ -227,11 +236,12 @@ export default {
         nama: "",
         type: "",
         capacity: 0,
-        number: "",
+        number: this.generateRandomNumber(),
       };
     },
     async addKendaraan() {
       try {
+        this.form.number = this.generateRandomNumber();
         // const apiUrl = import.meta.env.VITE_API_URL;
         // const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
         const response = await fetch(`http://103.179.56.241:8000/kendaraan`, {
@@ -293,7 +303,7 @@ export default {
     // Menutup modal edit
     closeEditModal() {
       this.showEditModal = false;
-      this.form = { nama: "", type: "", capacity: 0 }; // Reset form
+      this.form = { nama: "", type: "", capacity: 0, number: "" }; // Reset form
       this.selectedKendaraanId = null;  // Reset ID kendaraan yang dipilih
     },
 
