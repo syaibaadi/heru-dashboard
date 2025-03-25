@@ -21,9 +21,7 @@
             <th>Benefit</th>
             <th>Price</th>
             <th>Minimal Person</th>
-            <th>Maksimal Person</th>  
-            <th>Kendaraan</th>
-            <th>Kapasitas MaksimalKendaraan</th>
+            <th>Maksimal Person</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -37,8 +35,6 @@
             <td>{{ item.price }}</td>
             <td>{{ item.min_person }}</td>
             <td>{{ item.max_person }}</td>
-            <td>{{ item.kendaraan_nama }}</td>
-            <td>{{ item.kendaraan_capacity }}</td>
             <td>
               <button class="btn btn-warning btn-sm" @click="editWisata(item.id)">Edit</button>
               <button class="btn btn-danger btn-sm" @click="deleteWisata(item.id)">Hapus</button>
@@ -139,15 +135,6 @@
                   <label for="image" class="form-label">Image</label>
                   <input type="file" id="image" @change="handleImageUpload" class="form-control" />
                 </div>
-                <div class="mb-3">
-                  <label for="kendaraan" class="form-label">Kendaraan</label>
-                  <select id="kendaraan" v-model="form.kendaraan_id" class="form-select" aria-label="Default select example" required>
-                    <option value="" disabled>Pilih Kendaraan</option>
-                    <option v-for="kendaraan in kendaraanList" :key="kendaraan.id" :value="kendaraan.id">
-                      {{ kendaraan.nama }} ({{ kendaraan.capacity }} kapasitas)
-                    </option>
-                  </select>
-                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
@@ -196,15 +183,6 @@
                 <div class="mb-3">
                   <label for="image" class="form-label">Image</label>
                   <input type="file" id="image" @change="handleImageUpload" class="form-control" />
-                </div>
-                <div class="mb-3">
-                  <label for="kendaraan" class="form-label">Kendaraan</label>
-                  <select id="kendaraan" v-model="form.kendaraan_id" class="form-select" required>
-                    <option value="" disabled>Pilih Kendaraan</option>
-                    <option v-for="kendaraan in kendaraanList" :key="kendaraan.id" :value="kendaraan.id">
-                      {{ kendaraan.nama }} ({{ kendaraan.capacity }} kapasitas)
-                    </option>
-                  </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
@@ -256,7 +234,6 @@
           max_person: 0,
           image: "",
           imageBase64: "", // Image dalam base64
-          kendaraan_id: null // ID kendaraan yang dipilih
         },
       };
     },
@@ -345,7 +322,6 @@
             min_person: this.form.min_person,
             max_person: this.form.max_person,
             image: this.form.imageBase64, // Gambar dalam format base64
-            kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
           // const apiUrl = import.meta.env.VITE_API_URL;
           // const response = await fetch(`http://103.179.56.241:8000/wisata`, {
@@ -399,7 +375,6 @@
             min_person: this.form.min_person,
             max_person:this.form.max_person,
             image: this.form.imageBase64, // Gambar dalam format base64
-            kendaraan_id: this.form.kendaraan_id,  // ID kendaraan yang dipilih
           };
           // const response = await fetch(`http://103.179.56.241:8000/wisata/${this.form.id}`, {
           const response = await fetch(`http://103.179.56.241:8000/wisata/${this.form.id}`, {
